@@ -15,7 +15,7 @@
 #define HC4067_MUX_CHANNEL_AMOUNT_TO_USE 16
 
 #define MIDI_CHANNEL 1
-#define POLL_DELAY_MSEC 5
+#define POLL_DELAY_MSEC 10
 
 #include <USB-MIDI.h>
 

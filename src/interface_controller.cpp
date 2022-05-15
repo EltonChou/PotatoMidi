@@ -29,6 +29,7 @@ void GainController::refresh(
             this->gain_volumes[channel] = strip_val;
             midi_interface.sendControlChange(channel, strip_val, inChannel);
         }
+        delayMicroseconds(8);
     }
 }
 
