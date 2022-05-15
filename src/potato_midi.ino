@@ -25,11 +25,11 @@ using namespace interface_controller;
 
 USBMIDI_CREATE_INSTANCE(0, MIDI);
 
-interface_controller::GainController *gain_controller;
-interface_controller::ButtonController *btn_controller;
-interface_controller::LEDController *led_controller;
+interface_controller::GainController gain_controller;
+interface_controller::ButtonController btn_controller;
+interface_controller::LEDController led_controller;
 
-void handle_control_change(midi::Channel channel, uint8_t control_number, uint8_t control_value)
+void handle_control_change(uint8_t channel, uint8_t control_number, uint8_t control_value)
 {
   for (uint8_t i; i < HC595_DATA_LENGTH; ++i)
   {
@@ -37,11 +37,11 @@ void handle_control_change(midi::Channel channel, uint8_t control_number, uint8_
     {
       if (control_value == CONTROL_ON)
       {
-        led_controller->light_up(control_bottons[i].led_addr);
+        led_controller.light_up(control_bottons[i].led_addr);
       }
       else
       {
-        led_controller->light_off(control_bottons[i].led_addr);
+        led_controller.light_off(control_bottons[i].led_addr);
       }
     }
   }
@@ -59,8 +59,8 @@ void setup()
 void loop()
 {
   MIDI.read();
-  gain_controller->refresh(MIDI, MIDI_CHANNEL);
-  btn_controller->refresh(MIDI, MIDI_CHANNEL);
-  led_controller->refresh();
+  gain_controller.refresh(MIDI, MIDI_CHANNEL);
+  btn_controller.refresh(MIDI, MIDI_CHANNEL);
+  led_controller.refresh();
   delay(POLL_DELAY_MSEC);
 }
