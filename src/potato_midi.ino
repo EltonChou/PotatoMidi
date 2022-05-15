@@ -24,10 +24,11 @@
 using namespace interface_controller;
 
 USBMIDI_CREATE_INSTANCE(0, MIDI);
+midi::MidiInterface<usbMidi::usbMidiTransport> *midi_ptr = &MIDI;
 
-interface_controller::GainController gain_controller;
-interface_controller::ButtonController btn_controller;
-interface_controller::LEDController led_controller;
+GainController *gain_controller = new GainController();
+ButtonController *btn_controller = new ButtonController();
+LEDController *led_controller = new LEDController();
 
 void handle_control_change(uint8_t channel, uint8_t control_number, uint8_t control_value)
 {
@@ -37,11 +38,11 @@ void handle_control_change(uint8_t channel, uint8_t control_number, uint8_t cont
     {
       if (control_value == CONTROL_ON)
       {
-        led_controller.light_up(control_bottons[i].led_addr);
+        led_controller->light_up(control_bottons[i].led_addr);
       }
       else
       {
-        led_controller.light_off(control_bottons[i].led_addr);
+        led_controller->light_off(control_bottons[i].led_addr);
       }
     }
   }
@@ -52,15 +53,15 @@ void setup()
   interface_controller::setup();
 
   Serial.begin(115200);
-  MIDI.setHandleControlChange(handle_control_change);
-  MIDI.begin(MIDI_CHANNEL);
+  midi_ptr->setHandleControlChange(handle_control_change);
+  midi_ptr->begin(MIDI_CHANNEL);
 }
 
 void loop()
 {
-  MIDI.read();
-  gain_controller.refresh(MIDI, MIDI_CHANNEL);
-  btn_controller.refresh(MIDI, MIDI_CHANNEL);
-  led_controller.refresh();
+  midi_ptr->read();
+  gain_controller->refresh(midi_ptr, MIDI_CHANNEL);
+  btn_controller->refresh(midi_ptr, MIDI_CHANNEL);
+  led_controller->refresh();
   delay(POLL_DELAY_MSEC);
 }

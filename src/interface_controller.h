@@ -35,7 +35,7 @@ namespace interface_controller
     public:
         InterfaceController(){};
         ~InterfaceController(){};
-        virtual void refresh(midi::MidiInterface<usbMidi::usbMidiTransport> &midi_interface, midi::Channel inChannel){};
+        virtual void refresh(midi::MidiInterface<usbMidi::usbMidiTransport> *midi_interface, midi::Channel inChannel){};
     };
 
     class GainController : public InterfaceController
@@ -46,7 +46,7 @@ namespace interface_controller
     public:
         GainController();
         ~GainController(){};
-        void refresh(midi::MidiInterface<usbMidi::usbMidiTransport> &midi_interface, midi::Channel inChannel) override;
+        void refresh(midi::MidiInterface<usbMidi::usbMidiTransport> *midi_interface, midi::Channel inChannel) override;
     };
 
     class ButtonController : public InterfaceController
@@ -57,7 +57,7 @@ namespace interface_controller
     public:
         ButtonController(){};
         ~ButtonController(){};
-        void refresh(midi::MidiInterface<usbMidi::usbMidiTransport> &midi_interface, midi::Channel inChannel) override;
+        void refresh(midi::MidiInterface<usbMidi::usbMidiTransport> *midi_interface, midi::Channel inChannel) override;
     };
 
     class LEDController
