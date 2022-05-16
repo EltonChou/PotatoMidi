@@ -68,8 +68,8 @@ namespace interface_controller
     public:
         LEDController(){};
         ~LEDController(){};
-        void light_up(LED_addr led_addr);
-        void light_off(LED_addr led_addr);
+        inline void light_up(LED_addr led_addr) { led_state |= led_addr; };
+        inline void light_off(LED_addr led_addr) { led_state &= ~(led_addr); };
         void refresh();
     };
 

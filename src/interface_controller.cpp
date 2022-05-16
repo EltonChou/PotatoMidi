@@ -65,8 +65,6 @@ void ButtonController::refresh(
     }
 }
 
-void LEDController::light_up(LED_addr led_addr) { this->led_state |= led_addr; }
-void LEDController::light_off(LED_addr led_addr) { this->led_state &= ~(led_addr); }
 void LEDController::refresh()
 {
     hc595_controller::write_shift(uint8_t(this->led_state), LSBFIRST);
