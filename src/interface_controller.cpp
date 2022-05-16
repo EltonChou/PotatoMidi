@@ -43,8 +43,8 @@ void ButtonController::refresh(
     hc165_controller::disable_clock();
     hc165_controller::load();
     hc165_controller::enable_clock();
-    current_btn_state = hc165_controller::read_shift(LSBFIRST) << 8;
-    current_btn_state |= hc165_controller::read_shift(LSBFIRST);
+    current_btn_state = uint16_t(hc165_controller::read_shift(LSBFIRST)) << 8;
+    current_btn_state |= uint16_t(hc165_controller::read_shift(LSBFIRST));
 
     if (current_btn_state != this->old_btn_state)
     {
@@ -69,8 +69,8 @@ void LEDController::light_up(LED_addr led_addr) { this->led_state |= led_addr; }
 void LEDController::light_off(LED_addr led_addr) { this->led_state &= ~(led_addr); }
 void LEDController::refresh()
 {
-    hc595_controller::write_shift(this->led_state, LSBFIRST);
-    hc595_controller::write_shift(this->led_state >> 8, LSBFIRST);
+    hc595_controller::write_shift(uint8_t(this->led_state), LSBFIRST);
+    hc595_controller::write_shift(uint8_t(this->led_state >> 8), LSBFIRST);
     hc595_controller::store_data();
 }
 
