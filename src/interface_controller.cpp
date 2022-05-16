@@ -18,7 +18,7 @@ GainController::GainController()
 }
 
 void GainController::refresh(
-    midi::MidiInterface<usbMidi::usbMidiTransport> *midi_interface,
+    midi::MidiInterface<usbMidi::usbMidiTransport> &midi_interface,
     midi::Channel inChannel)
 {
     for (uint8_t channel = 0; channel < HC4067_CHANNEL_COUNT; ++channel)
@@ -27,14 +27,14 @@ void GainController::refresh(
         if (this->gain_volumes[channel] != strip_val)
         {
             this->gain_volumes[channel] = strip_val;
-            midi_interface->sendControlChange(channel, strip_val, inChannel);
+            midi_interface.sendControlChange(channel, strip_val, inChannel);
         }
         delayMicroseconds(8);
     }
 }
 
 void ButtonController::refresh(
-    midi::MidiInterface<usbMidi::usbMidiTransport> *midi_interface,
+    midi::MidiInterface<usbMidi::usbMidiTransport> &midi_interface,
     midi::Channel inChannel)
 {
     uint16_t current_btn_state;
@@ -56,7 +56,7 @@ void ButtonController::refresh(
                 CCButton the_button = control_bottons[i];
                 if (pressed_btn_state & the_button.addr)
                 {
-                    midi_interface->sendControlChange(
+                    midi_interface.sendControlChange(
                         the_button.control_number, CONTROL_ON, inChannel);
                 }
             }
