@@ -72,6 +72,24 @@ void LEDController::refresh()
     hc595_controller::store_data();
 }
 
+void LEDController::update_state(uint8_t channel, uint8_t control_number, uint8_t control_value)
+{
+    for (uint8_t i; i < HC595_DATA_LENGTH; ++i)
+    {
+        if (control_number == control_bottons[i].control_number)
+        {
+            if (control_value == CONTROL_ON)
+            {
+                this->light_up(control_bottons[i].led_addr);
+            }
+            else
+            {
+                this->light_off(control_bottons[i].led_addr);
+            }
+        }
+    }
+}
+
 void interface_controller::setup()
 {
     hc165_controller::setup();

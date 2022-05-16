@@ -24,28 +24,15 @@
 using namespace interface_controller;
 
 USBMIDI_CREATE_INSTANCE(0, MIDI);
-midi::MidiInterface<usbMidi::usbMidiTransport> *midi_ptr = &MIDI;
 
+midi::MidiInterface<usbMidi::usbMidiTransport> *midi_ptr = &MIDI;
 GainController *gain_controller = new GainController();
 ButtonController *btn_controller = new ButtonController();
 LEDController *led_controller = new LEDController();
 
 void handle_control_change(uint8_t channel, uint8_t control_number, uint8_t control_value)
 {
-  for (uint8_t i; i < HC595_DATA_LENGTH; ++i)
-  {
-    if (control_number == control_bottons[i].control_number)
-    {
-      if (control_value == CONTROL_ON)
-      {
-        led_controller->light_up(control_bottons[i].led_addr);
-      }
-      else
-      {
-        led_controller->light_off(control_bottons[i].led_addr);
-      }
-    }
-  }
+  led_controller->update_state(channel, control_number, control_value);
 }
 
 void setup()

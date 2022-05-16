@@ -71,6 +71,7 @@ namespace interface_controller
         inline void light_up(LED_addr led_addr) { led_state |= led_addr; };
         inline void light_off(LED_addr led_addr) { led_state &= ~(led_addr); };
         void refresh();
+        void update_state(uint8_t channel, uint8_t control_number, uint8_t control_value);
     };
 
 }
