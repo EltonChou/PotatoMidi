@@ -1,7 +1,7 @@
 #ifndef POTATOMIDI_INTERFACECONTROLLER_H_
 #define POTATOMIDI_INTERFACECONTROLLER_H_
 
-#include "USB-MIDI.h"
+#include <USB-MIDI.h>
 
 #include "potato_midi_defs.h"
 
