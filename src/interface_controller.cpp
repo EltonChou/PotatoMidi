@@ -5,13 +5,34 @@
 #include "hc595_controller.h"
 #include "interface_controller.h"
 
+#define get_midi_val(v) (constrain(v >> 3, 0, 127))
+
 using interface_controller::ButtonController;
 using interface_controller::GainController;
 using interface_controller::LEDController;
 
+const CCButton control_bottons[16] = {
+    {0x8000, 0x8000, 30},
+    {0x4000, 0x4000, 31},
+    {0x2000, 0x2000, 32},
+    {0x1000, 0x1000, 33},
+    {0x0800, 0x0800, 34},
+    {0x0400, 0x0400, 35},
+    {0x0200, 0x0200, 36},
+    {0x0100, 0x0100, 37},
+    {0x0080, 0x0080, 38},
+    {0x0040, 0x0040, 39},
+    {0x0020, 0x0020, 40},
+    {0x0010, 0x0010, 41},
+    {0x0008, 0x0008, 42},
+    {0x0004, 0x0004, 43},
+    {0x0002, 0x0002, 44},
+    {0x0001, 0x0001, 45},
+};
+
 GainController::GainController()
 {
-    for (uint8_t i = 0; i < HC4067_CHANNEL_COUNT; ++i)
+    for (uint8_t i = 0; i < HC4067_MUX_CHANNEL_AMOUNT_TO_USE; ++i)
     {
         this->gain_volumes[i] = 0;
     }
@@ -21,15 +42,21 @@ void GainController::refresh(
     midi::MidiInterface<usbMidi::usbMidiTransport> &midi_interface,
     midi::Channel inChannel)
 {
-    for (uint8_t channel = 0; channel < HC4067_CHANNEL_COUNT; ++channel)
+    for (uint8_t channel = 0; channel < HC4067_MUX_CHANNEL_AMOUNT_TO_USE; ++channel)
     {
-        uint8_t strip_val = constrain(hc4067_mux::read_channel_value(channel) / 8, 0, 127);
+        // Serial.print("CH: ");
+        // Serial.print(channel);
+        int a_val = hc4067_mux::read_channel_value(channel);
+        uint8_t strip_val = get_midi_val(a_val);
         if (this->gain_volumes[channel] != strip_val)
         {
             this->gain_volumes[channel] = strip_val;
             midi_interface.sendControlChange(channel, strip_val, inChannel);
+            // Serial.print("\tVol: ");
+            // Serial.print(strip_val);
         }
-        delayMicroseconds(8);
+        // Serial.println();
+        // delay(200);
     }
 }
 
