@@ -48,10 +48,6 @@ void GainController::refresh(
         uint8_t strip_val = get_midi_val(a_val);
         if (this->gain_volumes[ch] != strip_val)
         {
-            Serial.print("CH ");
-            Serial.print(ch);
-            Serial.print(" with VOL ");
-            Serial.println(strip_val);
             this->gain_volumes[ch] = strip_val;
             midi_interface.sendControlChange(ch, strip_val, inChannel);
         }
