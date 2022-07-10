@@ -42,21 +42,19 @@ void GainController::refresh(
     midi::MidiInterface<usbMidi::usbMidiTransport> &midi_interface,
     midi::Channel inChannel)
 {
-    for (uint8_t channel = 0; channel < HC4067_MUX_CHANNEL_AMOUNT_TO_USE; ++channel)
+    for (uint8_t ch = 0; ch < HC4067_MUX_CHANNEL_AMOUNT_TO_USE; ch++)
     {
-        // Serial.print("CH: ");
-        // Serial.print(channel);
-        int a_val = hc4067_mux::read_channel_value(channel);
+        int a_val = hc4067_mux::read_channel_value(ch);
         uint8_t strip_val = get_midi_val(a_val);
-        if (this->gain_volumes[channel] != strip_val)
+        if (this->gain_volumes[ch] != strip_val)
         {
-            this->gain_volumes[channel] = strip_val;
-            midi_interface.sendControlChange(channel, strip_val, inChannel);
-            // Serial.print("\tVol: ");
-            // Serial.print(strip_val);
+            Serial.print("CH ");
+            Serial.print(ch);
+            Serial.print(" with VOL ");
+            Serial.println(strip_val);
+            this->gain_volumes[ch] = strip_val;
+            midi_interface.sendControlChange(ch, strip_val, inChannel);
         }
-        // Serial.println();
-        // delay(200);
     }
 }
 

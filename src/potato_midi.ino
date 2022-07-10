@@ -1,5 +1,5 @@
 #define MIDI_CHANNEL 1
-#define POLL_DELAY_MSEC 30
+#define POLL_DELAY_MSEC 20
 #define get_midi_val(v) (constrain(v >> 3, 0, 127))
 
 #include <USB-MIDI.h>
@@ -34,25 +34,8 @@ void setup()
 void loop()
 {
   MIDI.read();
-  // gain_controller.refresh(MIDI, MIDI_CHANNEL);
+  gain_controller.refresh(MIDI, MIDI_CHANNEL);
   btn_controller.refresh(MIDI, MIDI_CHANNEL);
-
-  for (uint8_t channel = 0; channel < HC4067_MUX_CHANNEL_AMOUNT_TO_USE; ++channel)
-  {
-    // Serial.print("CH: ");
-    // Serial.print(channel);
-    int a_val = hc4067_mux::read_channel_value(channel);
-    uint8_t strip_val = get_midi_val(a_val);
-    if (gain_volumes[channel] != strip_val)
-    {
-      gain_volumes[channel] = strip_val;
-      MIDI.sendControlChange(channel, strip_val, MIDI_CHANNEL);
-      // Serial.print("\tVol: ");
-      // Serial.print(strip_val);
-    }
-    // Serial.println();
-    // delay(200);
-  }
 
   delay(POLL_DELAY_MSEC);
 }

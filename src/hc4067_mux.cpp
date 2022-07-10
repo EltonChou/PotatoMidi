@@ -19,37 +19,30 @@ int mux_channel[16][4] = {
     {0, 1, 1, 1},
     {1, 1, 1, 1}};
 
+int s_pins[] = {
+    HC4067_MUX_S0_PIN,
+    HC4067_MUX_S1_PIN,
+    HC4067_MUX_S2_PIN,
+    HC4067_MUX_S3_PIN};
+
 int hc4067_mux::read_channel_value(int channel)
 {
-    int s_pins[] = {
-        HC4067_MUX_S0_PIN,
-        HC4067_MUX_S1_PIN,
-        HC4067_MUX_S2_PIN,
-        HC4067_MUX_S3_PIN};
+    digitalWrite(HC4067_MUX_S0_PIN, mux_channel[channel][0]);
+    delayMicroseconds(10);
+    digitalWrite(HC4067_MUX_S1_PIN, mux_channel[channel][1]);
+    delayMicroseconds(10);
+    digitalWrite(HC4067_MUX_S2_PIN, mux_channel[channel][2]);
+    delayMicroseconds(10);
+    digitalWrite(HC4067_MUX_S3_PIN, mux_channel[channel][3]);
+    delayMicroseconds(10);
 
-    for (int i; i < 4; i++)
-    {
-        // digitalWrite(s_pins[i], 0);
-        digitalWrite(s_pins[i], mux_channel[channel][i]);
-        delayMicroseconds(8);
-    }
-    // Serial.print("\tMUX CH: ");
-    // Serial.print(channel);
     return analogRead(HC4067_MUX_DATA_PIN);
 }
 
 void hc4067_mux::setup()
 {
-    int s_pins[] = {
-        HC4067_MUX_S0_PIN,
-        HC4067_MUX_S1_PIN,
-        HC4067_MUX_S2_PIN,
-        HC4067_MUX_S3_PIN};
-
-    pinMode(HC4067_MUX_DATA_PIN, INPUT);
-    for (int i; i < 4; i++)
-    {
-        pinMode(s_pins[i], OUTPUT);
-        digitalWrite(s_pins[i], LOW);
-    }
+    pinMode(HC4067_MUX_S0_PIN, OUTPUT);
+    pinMode(HC4067_MUX_S1_PIN, OUTPUT);
+    pinMode(HC4067_MUX_S2_PIN, OUTPUT);
+    pinMode(HC4067_MUX_S3_PIN, OUTPUT);
 }
