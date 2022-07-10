@@ -1,15 +1,12 @@
 #define MIDI_CHANNEL 1
 #define POLL_DELAY_MSEC 20
-#define get_midi_val(v) (constrain(v >> 3, 0, 127))
 
 #include <USB-MIDI.h>
 
-#include "hc4067_mux.h"
 #include "interface_controller.h"
 
 using namespace interface_controller;
 
-int gain_volumes[HC4067_MUX_CHANNEL_AMOUNT_TO_USE] = {0, 0, 0, 0, 0, 0, 0, 0};
 
 USBMIDI_CREATE_INSTANCE(0, MIDI);
 
